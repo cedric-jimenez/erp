@@ -2,50 +2,37 @@
 
 **Epic Owner**: Frontend Lead  
 **Sprint**: 2-3  
-**Story Points Estimés**: 18 points  
+**Story Points Estimés**: 5 points  
 
 ## Description de l'Epic
 
-En tant qu'**équipe frontend**, nous devons mettre en place l'architecture Next.js complète avec les outils de développement, le système de design et l'intégration API pour développer efficacement l'interface utilisateur.
+En tant qu'**équipe frontend**, nous devons mettre en place l'environnement technique de base Next.js avec les outils de développement pour pouvoir commencer le développement des fonctionnalités métier.
 
 ## Valeur Métier
 
-- Interface moderne et responsive pour les utilisateurs PME
-- Architecture scalable et maintenable
-- Intégration fluide avec l'API backend
-- Expérience utilisateur optimisée pour utilisateurs non techniques
+- Environnement de développement opérationnel et reproductible
+- Outils de développement configurés (linting, formatting)
+- Base technique solide pour les développements futurs
+- "Hello World" fonctionnel comme preuve de concept
 
 ## User Stories
 
-### FRONTEND_US-01 : Configuration Next.js + UI Framework
-**Story Points**: 8
-En tant que **développeur frontend**, je veux un environnement Next.js avec Shadcn/UI pour développer rapidement des interfaces cohérentes.
-
-### FRONTEND_US-02 : Authentification et routing
-**Story Points**: 6  
-En tant que **développeur frontend**, je veux un système d'authentification avec protection des routes pour sécuriser l'accès selon les rôles.
-
-### FRONTEND_US-03 : Layout et navigation
-**Story Points**: 4
-En tant que **utilisateur**, je veux une navigation claire avec sidebar fixe pour accéder facilement aux différentes sections.
+### FRONTEND_US-01 : Configuration Next.js + Hello World
+**Story Points**: 5  
+**Fichier**: `FRONTEND_EPIC-01_US-01_NextJS_UI_Setup.md`
 
 ## Critères d'Acceptation de l'Epic
 
 - [ ] Application Next.js 14 fonctionnelle avec App Router
-- [ ] Shadcn/UI configuré avec thème PME cohérent
-- [ ] Authentification JWT intégrée avec l'API backend
-- [ ] Layout responsive avec sidebar navigation fixe
-- [ ] Routing protégé selon les rôles (Admin/Operator)
-- [ ] State management Zustand + React Query configuré
+- [ ] Page "Hello World ERP" s'affiche correctement
+- [ ] Configuration TypeScript sans erreurs
 - [ ] Configuration ESLint/Prettier pour équipe
+- [ ] `npm run dev`, `npm run build` fonctionnels
 
 ## Dépendances
 
-- Backend EPIC-02 (Authentification) doit être terminé
-- API endpoints `/auth/login` et `/users/profile` disponibles
+Aucune - Epic fondamentale
 
 ## Risques
 
-- Complexité SSR Next.js avec authentification
-- Performance bundle avec Shadcn/UI
-- Compatibilité mobile pour utilisateurs terrain
+- Configuration initiale complexe sur différents environnements
