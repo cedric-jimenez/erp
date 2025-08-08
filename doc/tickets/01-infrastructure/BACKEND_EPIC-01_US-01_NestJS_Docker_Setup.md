@@ -4,6 +4,7 @@
 **Story Points**: 8  
 **Sprint**: 1  
 **Assigné**: Tech Lead  
+**Status**: 📋 TODO
 
 ## User Story
 

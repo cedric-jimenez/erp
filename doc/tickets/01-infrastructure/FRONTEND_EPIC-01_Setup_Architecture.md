@@ -3,6 +3,7 @@
 **Epic Owner**: Frontend Lead  
 **Sprint**: 2-3  
 **Story Points Estimés**: 5 points  
+**Status**: 📋 TODO
 
 ## Description de l'Epic
 
@@ -18,7 +19,7 @@ En tant qu'**équipe frontend**, nous devons mettre en place l'environnement tec
 ## User Stories
 
 ### FRONTEND_US-01 : Configuration Next.js + Hello World
-**Story Points**: 5  
+**Story Points**: 5 | **Status**: 📋 TODO  
 **Fichier**: `FRONTEND_EPIC-01_US-01_NextJS_UI_Setup.md`
 
 ## Critères d'Acceptation de l'Epic

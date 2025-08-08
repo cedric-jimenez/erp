@@ -1,56 +1,45 @@
-# US-02 : Base de données avec Prisma
+# US-02 : Connexion Database + Prisma
 
 **Epic**: EPIC-01 Infrastructure  
-**Story Points**: 8  
+**Story Points**: 5  
 **Sprint**: 1-2  
 **Assigné**: Backend Dev  
+**Status**: 📋 TODO
 
 ## User Story
 
-En tant que **développeur**, je veux une base de données PostgreSQL avec Prisma ORM et des données de test pour commencer le développement.
+En tant que **développeur**, je veux une connexion PostgreSQL avec Prisma ORM fonctionnelle pour pouvoir développer les modules métier.
 
 ## Critères d'Acceptation
 
 **GIVEN** l'environnement Docker fonctionnel  
-**WHEN** je lance les migrations Prisma  
-**THEN** toutes les tables sont créées avec les bonnes relations  
-**AND** les données de seed sont chargées  
-**AND** le client Prisma est généré et injectable  
+**WHEN** je teste la connexion Prisma  
+**THEN** la connexion PostgreSQL fonctionne  
+**AND** le client Prisma est généré et injectable dans NestJS  
+**AND** une table de test simple peut être créée  
 
 ## Tâches Techniques (Definition of Done)
 
 - [ ] Installation Prisma (`prisma`, `@prisma/client`)
 - [ ] Initialisation Prisma (`npx prisma init`)
 - [ ] Configuration de la connexion PostgreSQL
-- [ ] Création du schéma Prisma (`schema.prisma`) :
-  - Table `users` (id, email, password, role, created_at, updated_at)
-  - Table `items` (id, code, name, description, unit, category, stock_min, active, created_at, updated_at)
-  - Table `vouchers` (id, number, date, type, status, reason, user_id, created_at, updated_at)
-  - Table `voucher_lines` (id, voucher_id, item_id, quantity, created_at, updated_at)
-  - Table `stock_movements` (id, item_id, voucher_id, quantity, type, created_at)
-  - Relations: User 1→n Voucher, Voucher 1→n VoucherLine, Item 1→n VoucherLine, Item 1→n StockMovement
+- [ ] Création du schéma Prisma minimal (`schema.prisma`) :
+  - Configuration du provider PostgreSQL
+  - Table de test simple `health_check` (id, status, timestamp)
 - [ ] Génération du client Prisma
 - [ ] Configuration du module Prisma dans NestJS
-- [ ] Scripts de migration et seeding :
-  - Seed utilisateurs (Admin par défaut, Operators de test)
-  - Seed catégories d'items (Électronique, Bureautique, etc.)
-  - Seed items de démonstration (20-30 items variés)
-  - Seed vouchers d'exemple (entrées, sorties)
-  - Seed mouvements de stock initiaux
+- [ ] Test de connexion basique
 
 ## Tests d'Acceptation
 
 - [ ] `npx prisma migrate dev` réussit
-- [ ] `npx prisma db seed` charge les données
-- [ ] Client Prisma injectable dans les modules
-- [ ] Toutes les relations fonctionnelles
+- [ ] Client Prisma injectable dans les modules NestJS
+- [ ] Connexion PostgreSQL fonctionnelle
+- [ ] Table de test créée et accessible
 
 ## Fichiers à Créer
 
-- `backend/prisma/schema.prisma`
-- `backend/prisma/migrations/`
-- `backend/prisma/seed.ts`
-- `backend/prisma/fixtures/` (données pour tests)
-- `backend/prisma/reset.ts`
+- `backend/prisma/schema.prisma` (minimal)
+- `backend/prisma/migrations/` (dossier auto-généré)
 - `backend/src/prisma/prisma.module.ts`
 - `backend/src/prisma/prisma.service.ts`

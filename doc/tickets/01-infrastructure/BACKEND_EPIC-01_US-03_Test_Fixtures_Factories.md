@@ -1,60 +1,47 @@
-# US-03 : Fixtures et Factories de test
+# US-03 : Tests de base
 
 **Epic**: EPIC-01 Infrastructure  
-**Story Points**: 5  
+**Story Points**: 3  
 **Sprint**: 2  
 **Assigné**: Backend Dev  
+**Status**: 📋 TODO
 
 ## User Story
 
-En tant que **développeur**, je veux un système de fixtures et factories pour tester efficacement mes modules.
+En tant que **développeur**, je veux une configuration de tests de base pour pouvoir tester l'infrastructure.
 
 ## Critères d'Acceptation
 
-**GIVEN** les modules métier développés  
-**WHEN** j'écris des tests unitaires  
-**THEN** je peux utiliser des fixtures préparées  
-**AND** je peux générer des données de test avec les factories  
+**GIVEN** l'infrastructure mise en place  
+**WHEN** je lance les tests  
+**THEN** Jest exécute les tests sans erreur  
+**AND** les tests d'intégration de base fonctionnent  
 **AND** les tests s'exécutent rapidement (< 5s)  
 
 ## Tâches Techniques (Definition of Done)
 
-- [ ] Installation Faker.js pour génération de données
-- [ ] Création du système de fixtures :
-  - Base `TestFixture` class avec helpers communs
-  - Fixtures utilisateurs (Admin, Operators, différents rôles)
-  - Fixtures items (catégories variées, stocks différents)
-  - Fixtures vouchers (tous types et statuts)
-  - Fixtures mouvements de stock
-- [ ] Factories avec Faker.js :
-  - `UserFactory` pour génération d'utilisateurs
-  - `ItemFactory` pour génération d'items
-  - `VoucherFactory` pour vouchers complexes
-  - `StockMovementFactory` pour mouvements
-- [ ] Configuration des tests :
-  - Database de test séparée (SQLite en mémoire)
+- [ ] Configuration Jest pour NestJS
+- [ ] Configuration des tests d'intégration :
+  - Database de test séparée (SQLite en mémoire ou PostgreSQL test)
   - Setup/Teardown automatique pour tests
-  - Helpers pour cleanup entre tests
-- [ ] Documentation des fixtures
+  - Helpers de base pour cleanup entre tests
+- [ ] Tests basiques :
+  - Test de l'application (app.e2e-spec.ts)
+  - Test de connexion Prisma
+  - Test du health check endpoint
+- [ ] Scripts npm pour les tests
 
 ## Tests d'Acceptation
 
-- [ ] Factory génère des données cohérentes
+- [ ] `npm run test` exécute les tests unitaires
+- [ ] `npm run test:e2e` exécute les tests d'intégration
 - [ ] Database de test isolée des autres
 - [ ] Setup/Teardown automatique fonctionne
 - [ ] Performance tests < 5s
-- [ ] Documentation complète
 
 ## Fichiers à Créer
 
-- `backend/src/test/fixtures/base-fixture.ts`
-- `backend/src/test/fixtures/user.fixture.ts`
-- `backend/src/test/fixtures/item.fixture.ts`
-- `backend/src/test/fixtures/voucher.fixture.ts`
-- `backend/src/test/fixtures/stock-movement.fixture.ts`
-- `backend/src/test/factories/user.factory.ts`
-- `backend/src/test/factories/item.factory.ts`
-- `backend/src/test/factories/voucher.factory.ts`
-- `backend/src/test/helpers/test-database.helper.ts`
+- `backend/test/app.e2e-spec.ts`
+- `backend/test/jest-e2e.json`
+- `backend/src/test/test-database.helper.ts`
 - `backend/src/test/setup.ts`
-- `backend/docs/TESTING.md`

@@ -2,39 +2,40 @@
 
 **Epic Owner**: Tech Lead
 **Sprint**: 1-2
-**Story Points Estimés**: 21 points
+**Story Points Estimés**: 16 points
+**Status**: 📋 TODO
 
 ## Description de l'Epic
 
-En tant qu'**équipe de développement**, nous devons mettre en place l'infrastructure technique complète du backend (NestJS, Docker, base de données) pour pouvoir développer les fonctionnalités métier.
+En tant qu'**équipe de développement**, nous devons mettre en place l'infrastructure technique de base du backend (NestJS, Docker, base de données) pour pouvoir commencer le développement des fonctionnalités métier.
 
 ## Valeur Métier
 
-- Base technique solide pour le développement
+- Base technique solide et fonctionnelle
 - Environnement reproductible avec Docker
-- Base de données structurée selon les besoins métier
-- Gain de temps pour les développements futurs
+- Connexion base de données opérationnelle
+- API "Hello World" comme preuve de concept
 
 ## User Stories
 
 ### US-01 : Configuration NestJS + Docker
-**Story Points**: 8
-En tant que **développeur**, je veux un environnement NestJS avec Docker Compose pour développer localement rapidement.
+**Story Points**: 8 | **Status**: 📋 TODO  
+**Fichier**: `BACKEND_EPIC-01_US-01_NestJS_Docker_Setup.md`
 
-### US-02 : Base de données avec Prisma
-**Story Points**: 8  
-En tant que **développeur**, je veux une base de données PostgreSQL avec Prisma ORM et des données de test pour commencer le développement.
+### US-02 : Connexion Database + Prisma
+**Story Points**: 5 | **Status**: 📋 TODO  
+**Fichier**: `BACKEND_EPIC-01_US-02_Database_Prisma_Setup.md`
 
-### US-03 : Fixtures et Factories de test
-**Story Points**: 5
-En tant que **développeur**, je veux un système de fixtures et factories pour tester efficacement mes modules.
+### US-03 : Tests de base
+**Story Points**: 3 | **Status**: 📋 TODO  
+**Fichier**: `BACKEND_EPIC-01_US-03_Test_Fixtures_Factories.md`
 
 ## Critères d'Acceptation de l'Epic
 
 - [ ] Environnement Docker fonctionnel (`docker-compose up`)
-- [ ] Base de données structurée avec données de test
-- [ ] Système de tests avec fixtures
-- [ ] Documentation technique à jour
+- [ ] API "Hello World" accessible sur http://localhost:3001
+- [ ] Connexion PostgreSQL + Prisma fonctionnelle
+- [ ] Tests de base configurés et opérationnels
 
 ## Dépendances
 

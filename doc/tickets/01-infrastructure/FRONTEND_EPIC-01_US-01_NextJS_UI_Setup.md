@@ -4,6 +4,7 @@
 **Story Points**: 5  
 **Sprint**: 2  
 **Assigné**: Frontend Lead  
+**Status**: 📋 TODO
 
 ## User Story
 
