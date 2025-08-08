@@ -45,6 +45,7 @@ En tant que **gestionnaire de stock**, je veux créer, consulter, modifier et ar
 - [ ] Contrôleur Items (`items.controller.ts`) :
   - `GET /api/v1/items` (liste paginée avec filtres)
   - `GET /api/v1/items/:id` (détail)
+  - `GET /api/v1/items/check-code?code=USB001` (vérification unicité code)
   - `POST /api/v1/items` (création)
   - `PUT /api/v1/items/:id` (modification complète)
   - `PATCH /api/v1/items/:id` (modification partielle)

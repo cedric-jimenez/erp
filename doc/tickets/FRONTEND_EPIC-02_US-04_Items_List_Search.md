@@ -1,7 +1,7 @@
 # FRONTEND_EPIC-02_US-04 : Liste et recherche d'articles
 
 **Epic**: FRONTEND EPIC-02 Interface Articles  
-**Story Points**: 8  
+**Story Points**: 10  
 **Sprint**: 4  
 **Assigné**: Frontend Dev  
 
@@ -87,13 +87,19 @@ En tant que **gestionnaire de stock**, je veux consulter et rechercher mes artic
   - Bookmarkable URLs
   - Restoration état après refresh
 - [ ] Performance :
-  - Virtualisation si >5000 items
-  - Lazy loading des images (si présentes)
-  - Optimisation re-renders
+  - Virtualisation obligatoire si >5000 items (react-window)
+  - Windowing avec buffer de 100 items visible
+  - Lazy loading des images/icônes (si présentes)
+  - Optimisation re-renders (React.memo, useMemo)
+  - Debounce recherche + pagination virtuelle
+  - Cache intelligent des résultats recherche
 - [ ] Responsive design :
   - Table scrollable horizontalement sur mobile
-  - Colonnes prioritaires visibles
+  - Colonnes prioritaires visibles (Code, Nom, Stock sur mobile)
   - Filtres collapsibles sur petits écrans
+  - Mode carte sur tablette (alternative à table)
+  - Touch gestures : swipe pour actions rapides
+  - Optimisation usage terrain PME (tablettes robustes)
 
 ## Intégration API Backend
 
@@ -154,7 +160,9 @@ interface ItemsListResponse {
 - [ ] Tri par colonnes fonctionnel
 - [ ] Pagination conserve filtres et recherche
 - [ ] URLs bookmarkables avec tous les paramètres
-- [ ] Performance acceptable sur 10,000+ items
+- [ ] Performance acceptable sur 10,000+ items (virtualisation)
+- [ ] Tests de charge : 50k items en <2s, recherche <300ms
+- [ ] Mémoire stable même sur gros datasets
 - [ ] Responsive design sur mobile/tablette
 - [ ] Loading states et erreurs gérés
 - [ ] Actions rapides accessibles

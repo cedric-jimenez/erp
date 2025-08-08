@@ -40,6 +40,9 @@ En tant qu'**opérateur**, je veux créer des bons avec plusieurs lignes d'artic
   - `voucher-response.dto.ts` avec lignes incluses
 - [ ] Service Vouchers (`vouchers.service.ts`) :
   - `create(createVoucherDto)` - Création avec lignes
+  - `createDraft(createVoucherDto)` - Création brouillon
+  - `updateDraft(id, updateVoucherDto)` - Modification brouillon
+  - `preValidate(id)` - Pré-validation avant soumission
   - `findAll(filters)` - Liste avec pagination
   - `findOne(id)` - Détail avec lignes
   - `update(id, updateVoucherDto)` - Modification
@@ -48,6 +51,9 @@ En tant qu'**opérateur**, je veux créer des bons avec plusieurs lignes d'artic
   - `updateLine(lineId, lineDto)` - Modification ligne
 - [ ] Contrôleur Vouchers (`vouchers.controller.ts`) :
   - `POST /api/v1/vouchers` (création)
+  - `POST /api/v1/vouchers/draft` (création brouillon)
+  - `PUT /api/v1/vouchers/:id/draft` (modification brouillon)
+  - `POST /api/v1/vouchers/:id/pre-validate` (pré-validation)
   - `GET /api/v1/vouchers` (liste avec filtres)
   - `GET /api/v1/vouchers/:id` (détail avec lignes)
   - `PUT /api/v1/vouchers/:id` (modification)

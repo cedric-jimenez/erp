@@ -1,7 +1,7 @@
 # FRONTEND_EPIC-02_US-05 : Formulaires de création/modification d'articles
 
 **Epic**: FRONTEND EPIC-02 Interface Articles  
-**Story Points**: 8  
+**Story Points**: 10  
 **Sprint**: 4-5  
 **Assigné**: Frontend Dev  
 
@@ -118,8 +118,11 @@ En tant que **gestionnaire de stock**, je veux créer et modifier des articles a
   - Loading states pendant soumission
 - [ ] Responsive design :
   - Layout formulaire mobile-friendly
-  - Champs empilés sur petits écrans
-  - Boutons actions accessibles
+  - Champs empilés sur petits écrans (320px+)
+  - Boutons actions accessibles (min 44px touch)
+  - Mode paysage tablette optimisé
+  - Adaptation saisie terrain : gros boutons, éléments espacés
+  - Support gants/stylus pour tablettes robustes
 - [ ] Gestion des erreurs :
   - Validation serveur override client
   - Messages d'erreur contextuels

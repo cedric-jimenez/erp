@@ -1,8 +1,8 @@
 # FRONTEND_EPIC-04_US-12 : Création de bons multi-lignes
 
 **Epic**: FRONTEND EPIC-04 Interface Bons  
-**Story Points**: 12  
-**Sprint**: 7  
+**Story Points**: 18  
+**Sprint**: 7-8  
 **Assigné**: Frontend Dev  
 
 ## User Story
@@ -106,9 +106,11 @@ En tant qu'**opérateur**, je veux créer des bons avec plusieurs lignes d'artic
   - Option création rapide nouvel article
 - [ ] Gestion lignes dynamiques :
   - Ajout/suppression lignes fluide
-  - Réorganisation par drag & drop
+  - Réorganisation par drag & drop (react-beautiful-dnd)
   - Duplication de ligne avec ajustements
-  - Import CSV pour saisie en masse (bonus)
+  - Import CSV/Excel pour saisie en masse
+  - Validation format import (template fourni)
+  - Gestion erreurs d'import avec rapport détaillé
 - [ ] Validation métier temps réel :
   - Vérification stock disponible pour sorties
   - Calculs automatiques (totaux, impacts)
@@ -119,10 +121,12 @@ En tant qu'**opérateur**, je veux créer des bons avec plusieurs lignes d'artic
   - Champs conditionnels (entrepôt source/destination)
   - Validation spécifique par type
 - [ ] UX avancée :
-  - Scanner code-barres (bonus avec caméra)
-  - Saisie clavier optimisée (Tab, Enter)
-  - Shortcuts pour actions fréquentes
+  - Scanner code-barres avec caméra (html5-qrcode)
+  - Saisie clavier optimisée (Tab, Enter, Ctrl+S)
+  - Shortcuts pour actions fréquentes (Ctrl+L nouvelle ligne)
   - Annulation avec confirmation si modifications
+  - Mode plein écran pour saisie intensive
+  - Templates de bons pré-configurés
 
 ## Intégration API Backend
 

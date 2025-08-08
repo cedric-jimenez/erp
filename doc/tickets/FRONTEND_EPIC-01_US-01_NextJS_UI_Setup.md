@@ -1,7 +1,7 @@
 # FRONTEND_EPIC-01_US-01 : Configuration Next.js + UI Framework
 
 **Epic**: FRONTEND EPIC-01 Setup Architecture  
-**Story Points**: 8  
+**Story Points**: 10  
 **Sprint**: 2  
 **Assigné**: Frontend Lead  
 
@@ -32,6 +32,14 @@ En tant que **développeur frontend**, je veux un environnement Next.js avec Sha
   - Warning: Amber-500 (#f59e0b) - alertes stock bas
   - Error: Red-600 (#dc2626) - erreurs, stock critique
   - Background: Slate-50 (#f8fafc) - fond application
+- **Responsive breakpoints** :
+  - Mobile: 320-767px (usage terrain smartphone)
+  - Tablet: 768-1023px (tablettes robustes PME)
+  - Desktop: 1024px+ (postes fixes bureaux)
+- **Contraintes usage terrain** :
+  - Boutons min 44px (touch friendly)
+  - Contraste élevé pour écrans extérieurs
+  - Gestes touch : swipe, long press, pinch
 
 - **Typography** :
   - Font principale: Inter (lisible, moderne)
@@ -65,17 +73,47 @@ En tant que **développeur frontend**, je veux un environnement Next.js avec Sha
   - ESLint avec règles Next.js et React
   - Prettier avec configuration équipe
   - Husky pour pre-commit hooks
+- [ ] Architecture State Management :
+  - Zustand pour state global (auth, user, settings)
+  - React Query pour cache serveur et sync
+  - Stores modulaires par domaine (items, vouchers, stock)
+  - Persistence strategies (localStorage, sessionStorage)
+- [ ] Stratégie Tests Frontend :
+  - Jest + Testing Library configuration
+  - Tests utils et helpers partagés
+  - Mocks API standardisés
+  - Coverage reports et seuils qualité
+- [ ] Performance et Error Handling :
+  - Error Boundaries React par module
+  - Performance monitoring (Web Vitals)
+  - Lazy loading routes et composants
+  - Bundle analysis configuration
 - [ ] Structure des dossiers frontend :
   ```
   frontend/
   ├── app/                 # App Router Next.js
   ├── components/          # Composants réutilisables
   │   ├── ui/             # Composants Shadcn/UI
-  │   └── layout/         # Layout components
+  │   ├── layout/         # Layout components
+  │   ├── items/          # Composants spécifiques items
+  │   ├── vouchers/       # Composants spécifiques vouchers
+  │   └── stock/          # Composants spécifiques stock
   ├── lib/                # Utilities et configurations
+  │   ├── api/            # Clients API et fetchers
+  │   ├── validations/    # Zod schemas
+  │   └── utils/          # Fonctions utilitaires
   ├── hooks/              # Custom React hooks
   ├── store/              # Zustand stores
-  └── types/              # TypeScript types
+  │   ├── auth.ts         # Store authentification
+  │   ├── items.ts        # Store items
+  │   ├── vouchers.ts     # Store vouchers
+  │   └── settings.ts     # Store préférences utilisateur
+  ├── types/              # TypeScript types
+  ├── __tests__/          # Tests et test utils
+  │   ├── __mocks__/      # Mocks API et composants
+  │   ├── utils/          # Test helpers
+  │   └── setup.ts        # Configuration Jest
+  └── error-boundaries/   # Error boundaries par module
   ```
 - [ ] Configuration environnements (.env.local, .env.example)
 - [ ] Setup base layout avec Shadcn/UI
@@ -104,6 +142,13 @@ En tant que **développeur frontend**, je veux un environnement Next.js avec Sha
 - `frontend/app/page.tsx`
 - `frontend/app/globals.css`
 - `frontend/lib/utils.ts`
+- `frontend/lib/api/client.ts` (client React Query)
+- `frontend/store/auth.ts` (store Zustand auth)
+- `frontend/store/settings.ts` (store préférences)
+- `frontend/error-boundaries/app-error-boundary.tsx`
+- `frontend/__tests__/setup.ts` (configuration Jest)
+- `frontend/__tests__/utils/test-utils.tsx` (render avec providers)
+- `frontend/__tests__/__mocks__/api.ts` (mocks API)
 - `frontend/components/ui/` (composants Shadcn/UI installés)
 
 ## Maquette Conceptuelle
