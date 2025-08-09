@@ -4,7 +4,7 @@
 **Story Points**: 8  
 **Sprint**: 1  
 **Assigné**: Tech Lead  
-**Status**: 📋 TODO
+**Status**: ✅ DONE
 
 ## User Story
 
@@ -21,41 +21,63 @@ En tant que **développeur**, je veux un environnement NestJS avec Docker Compos
 
 ## Tâches Techniques (Definition of Done)
 
-- [ ] Créer le dossier `backend/`
-- [ ] Initialiser le projet NestJS (`nest new backend`)
-- [ ] Configuration TypeScript (`tsconfig.json`)
-- [ ] Configuration ESLint + Prettier
-- [ ] Installation des dépendances de base :
+- [x] Créer le dossier `backend/`
+- [x] Initialiser le projet NestJS (`nest new backend`)
+- [x] Configuration TypeScript (`tsconfig.json`)
+- [x] Configuration ESLint + Prettier (format moderne eslint.config.js)
+- [x] Installation des dépendances de base :
   - `@nestjs/core`, `@nestjs/common`, `@nestjs/platform-express`
   - `class-validator`, `class-transformer`
   - `@nestjs/swagger` pour la documentation API
-- [ ] Configuration des scripts npm (`dev`, `build`, `test`, `lint`)
-- [ ] Création du `Dockerfile` pour le backend
-- [ ] Configuration Docker Compose :
-  - Service backend (NestJS)
-  - Service database (PostgreSQL)
-  - Service pgAdmin
+- [x] Configuration des scripts npm (`dev`, `build`, `test`, `lint`)
+- [x] Création du `Dockerfile` pour le backend (multi-stage: development, builder, production)
+- [x] Configuration Docker Compose :
+  - Service backend (NestJS) avec healthcheck
+  - Service database (PostgreSQL) avec healthcheck
+  - Service pgAdmin avec healthcheck
   - Volumes persistants
   - Networks Docker
-- [ ] Configuration des variables d'environnement (`.env.example`, `.env.docker`)
-- [ ] Scripts de démarrage Docker (`docker-start.sh`, `docker-stop.sh`)
+- [x] Configuration des variables d'environnement (`.env.example`, `.env.docker`)
+- [x] Scripts de démarrage Docker (`docker-start.sh`, `docker-stop.sh`)
 
 ## Tests d'Acceptation
 
-- [ ] `npm run lint` sans erreur
-- [ ] `npm run build` réussit
-- [ ] `docker-compose up` démarre tous les services
-- [ ] API Health check répond sur `/health`
+- [x] `yarn lint` sans erreur ✅
+- [x] `yarn build` réussit ✅
+- [x] `docker-compose up` démarre tous les services ✅
+- [x] API Health check répond sur `/api/v1/health` ✅
 
-## Fichiers à Créer
+## Fichiers Créés ✅
 
-- `backend/package.json`
-- `backend/tsconfig.json`
-- `backend/src/main.ts`
-- `backend/src/app.module.ts`
-- `backend/Dockerfile`
-- `backend/.env.example`
-- `docker-compose.yml` (racine du projet)
-- `.env.docker`
-- `scripts/docker-start.sh`
-- `scripts/docker-stop.sh`
+- [x] `backend/package.json` - Configuration du projet avec scripts yarn
+- [x] `backend/tsconfig.json` - Configuration TypeScript
+- [x] `backend/src/main.ts` - Point d'entrée avec Swagger et validation
+- [x] `backend/src/app.module.ts` - Module racine NestJS
+- [x] `backend/src/app.controller.ts` - Contrôleur avec endpoints Hello World et Health
+- [x] `backend/src/app.service.ts` - Service applicatif
+- [x] `backend/Dockerfile` - Multi-stage (development, builder, production)
+- [x] `backend/.env.example` - Variables d'environnement de développement
+- [x] `backend/docker-compose.yml` - Configuration Docker locale backend
+- [x] `backend/Makefile` - Scripts de développement simplifiés
+- [x] `backend/jest.config.js` - Configuration Jest pour les tests
+- [x] `backend/eslint.config.js` - Configuration ESLint moderne
+- [x] `docker-compose.yml` - Configuration Docker complète (racine du projet)
+- [x] `.env.docker` - Variables d'environnement Docker
+- [x] `scripts/docker-start.sh` - Script de démarrage avec healthchecks
+- [x] `scripts/docker-stop.sh` - Script d'arrêt propre
+
+## Améliorations Ajoutées
+
+- **Tests unitaires** avec Jest configuré
+- **Tests e2e** avec Supertest
+- **Healthchecks Docker** pour tous les services
+- **Makefile** avec commandes de développement
+- **Configuration ESLint moderne** (eslint.config.js)
+- **Multi-stage Dockerfile** optimisé
+- **Dépendances Docker intelligentes** avec conditions de santé
+
+## Tâches à Faire Avant US-02
+
+- [ ] **Logs d'API plus verbeux** - Ajouter un middleware de logging pour tracer les requêtes HTTP
+- [ ] **Nettoyage Makefile** - Garder uniquement les commandes essentielles pour simplifier l'utilisation
+- [ ] **Simplification Docker Compose** - Revoir la configuration et voir s'il peut être simplifié (variables, services, volumes)

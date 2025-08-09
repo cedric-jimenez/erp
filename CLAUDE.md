@@ -39,18 +39,20 @@ erp/
 
 ## Development Commands
 
+**IMPORTANT**: Always use `yarn` as the package manager, never `npm`.
+
 **Frontend** (when implemented):
 ```bash
 cd frontend
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 **Backend** (when implemented):
 ```bash
 cd backend
-npm install
-npm run start:dev
+yarn install
+yarn start:dev
 ```
 
 **Full Stack with Docker**:
