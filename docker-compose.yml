@@ -48,12 +48,10 @@ services:
 
   # Backend NestJS
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-      target: development
+    image: node:24-alpine
     container_name: erp-backend
-    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "yarn install && yarn start:dev"
     environment:
       NODE_ENV: development
       DATABASE_URL: postgresql://erp_user:erp_password@postgres:5432/erp_db
@@ -62,18 +60,17 @@ services:
       - "3001:3001"
     volumes:
       - ./backend:/app
-      - /app/node_modules
     networks:
       - erp-network
     depends_on:
       postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/v1/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
+#    healthcheck:
+#      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/v1/health"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 60s
 
 volumes:
   postgres_data:

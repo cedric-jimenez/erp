@@ -14,7 +14,7 @@ The project follows a modular, extensible architecture using modern TypeScript-b
 ## Technology Stack
 
 - **Frontend**: Next.js + TypeScript (planned: Shadcn/UI or MUI, Zustand/React Query for state)
-- **Backend**: NestJS + TypeScript (planned: Prisma ORM, JWT + RBAC auth)
+- **Backend**: NestJS + TypeScript + Swagger (planned: Prisma ORM, JWT + RBAC auth)
 - **Database**: PostgreSQL (production), SQLite (local development), MySQL/MariaDB (flexible hosting)
 - **Containerization**: Docker + Docker Compose
 
@@ -35,7 +35,7 @@ erp/
 └── README.md
 ```
 
-**Note**: Currently only documentation exists - no actual frontend/backend directories are present yet.
+**Note**: Backend is implemented with basic NestJS setup and Swagger documentation. Frontend is not yet implemented.
 
 ## Development Commands
 
@@ -48,7 +48,7 @@ yarn install
 yarn dev
 ```
 
-**Backend** (when implemented):
+**Backend**:
 ```bash
 cd backend
 yarn install
@@ -58,6 +58,9 @@ yarn start:dev
 **Full Stack with Docker**:
 ```bash
 docker-compose up --build
+# ou depuis la racine
+make up
+make urls  # Affiche toutes les URLs
 ```
 
 **Expected Services**:
@@ -126,10 +129,33 @@ docker-compose up --build
 
 ## Current State
 
-This project is in the planning/documentation phase. The codebase currently contains:
-- Comprehensive documentation in `doc/` directory
-- Screen mockups for the item management UI
-- Architectural guidelines and technical specifications
-- No actual implementation code yet
+### Implemented
+- ✅ **Backend**: NestJS setup with TypeScript, Docker, Swagger documentation
+- ✅ **Documentation**: Comprehensive docs in `doc/` directory
+- ✅ **Infrastructure**: Docker Compose, Makefile commands
+- ✅ **API Documentation**: Swagger UI accessible at `/api`
 
-When implementing, refer to the detailed guidelines in `doc/guidelines.md` for UX/UI patterns, API design, and security considerations.
+### In Progress / Planned
+- ⏳ **Database**: Prisma ORM setup with PostgreSQL
+- ⏳ **Authentication**: JWT + RBAC implementation
+- ⏳ **Core Modules**: Items, Stock, Vouchers management
+- ⏳ **Frontend**: Next.js implementation
+- ⏳ **Testing**: Unit and E2E tests
+
+### Available Commands
+```bash
+# Backend development
+cd backend && yarn start:dev
+
+# Docker management
+make up     # Start all services
+make down   # Stop all services  
+make urls   # Show all project URLs
+
+# Access points
+# - Backend API: http://localhost:3001
+# - Swagger docs: http://localhost:3001/api
+# - pgAdmin: http://localhost:5050 (when configured)
+```
+
+When implementing new features, refer to the detailed guidelines in `doc/guidelines.md` for UX/UI patterns, API design, and security considerations.
