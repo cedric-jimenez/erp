@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Table de test pour vérifier la connexion Prisma
+model HealthCheck {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("ok")
+  timestamp DateTime @default(now())
+
+  @@map("health_check")
+}
+
+// Modèle Item pour la gestion des articles
+model Item {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique @db.VarChar(50)
+  name        String    @db.VarChar(200)
+  description String?   @db.Text
+  unit        String    @default("unité") @db.VarChar(20)
+  category    String?   @db.VarChar(100)
+  stockMin    Int       @default(0) @map("stock_min")
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@index([code])
+  @@index([category])
+  @@index([active])
+  @@index([deletedAt])
+  @@map("items")
+}
