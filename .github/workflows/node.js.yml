@@ -34,6 +34,12 @@ jobs:
         cache-dependency-path: backend/yarn.lock
     - name: Install dependencies
       run: yarn --frozen-lockfile
-    - name: Install dependencies
+    - name: Lint
+      run: yarn lint
+    - name: Typecheck
+      run: yarn typecheck
+    - name: Tests
       run: yarn test
+    - name: Coverage
+      run: yarn test:cov
 
