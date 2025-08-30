@@ -5,8 +5,10 @@ import {
   expectItemStructure,
   expectPaginationStructure,
   createTestConditions,
+  MockPrismaService,
 } from './test-helpers';
 import { ItemFactory } from './item.factory';
+import { Item } from '@prisma/client';
 
 describe('Test Helpers', () => {
   describe('createMockPrismaService', () => {
@@ -29,7 +31,8 @@ describe('Test Helpers', () => {
       const mockPrisma = createMockPrismaService();
 
       // Test that mock functions can be configured
-      mockPrisma.item.create.mockResolvedValue({ id: 1 } as any);
+      const mockItem: Item = ItemFactory.create({ id: 1 });
+      mockPrisma.item.create.mockResolvedValue(mockItem);
       mockPrisma.item.findMany.mockResolvedValue([]);
 
       expect(mockPrisma.item.create).toHaveBeenCalledTimes(0);
@@ -38,7 +41,7 @@ describe('Test Helpers', () => {
   });
 
   describe('setupMockPrismaSuccess', () => {
-    let mockPrisma: any;
+    let mockPrisma: MockPrismaService;
 
     beforeEach(() => {
       mockPrisma = createMockPrismaService();
@@ -56,7 +59,7 @@ describe('Test Helpers', () => {
       });
     });
 
-    it('should configure create mock to return new item', () => {
+    it('should configure create mock to return new item', async () => {
       setupMockPrismaSuccess(mockPrisma);
 
       const createData = {
@@ -65,9 +68,7 @@ describe('Test Helpers', () => {
         description: 'Test Description',
       };
 
-      const createdItem =
-        mockPrisma.item.create.mock.results[0]?.value ||
-        mockPrisma.item.create({ data: createData });
+      const createdItem = await mockPrisma.item.create({ data: createData });
 
       expect(createdItem).toHaveProperty('id');
       expect(createdItem).toHaveProperty('code');
@@ -77,25 +78,33 @@ describe('Test Helpers', () => {
     it('should configure findMany and count mocks with resolved values', () => {
       setupMockPrismaSuccess(mockPrisma);
 
-      expect(mockPrisma.item.findMany.mockResolvedValue).toBeDefined();
-      expect(mockPrisma.item.count.mockResolvedValue).toBeDefined();
+      expect(
+        jest.mocked(mockPrisma.item.findMany).mockResolvedValue,
+      ).toBeDefined();
+      expect(
+        jest.mocked(mockPrisma.item.count).mockResolvedValue,
+      ).toBeDefined();
     });
 
-    it('should configure findFirst mock with conditional logic', () => {
+    it('should configure findFirst mock with conditional logic', async () => {
       setupMockPrismaSuccess(mockPrisma);
 
-      const resultForId999 = mockPrisma.item.findFirst({ where: { id: 999 } });
-      const resultForId1 = mockPrisma.item.findFirst({ where: { id: 1 } });
+      const resultForId999 = await mockPrisma.item.findFirst({
+        where: { id: 999 },
+      });
+      const resultForId1 = await mockPrisma.item.findFirst({
+        where: { id: 1 },
+      });
 
       expect(resultForId999).toBeNull();
       expect(resultForId1).toBeDefined();
     });
 
-    it('should configure update mock to return updated item', () => {
+    it('should configure update mock to return updated item', async () => {
       setupMockPrismaSuccess(mockPrisma);
 
       const updateData = { name: 'Updated Name' };
-      const updatedItem = mockPrisma.item.update({
+      const updatedItem = await mockPrisma.item.update({
         where: { id: 1 },
         data: updateData,
       });
@@ -107,7 +116,7 @@ describe('Test Helpers', () => {
   });
 
   describe('setupMockPrismaErrors', () => {
-    let mockPrisma: any;
+    let mockPrisma: MockPrismaService;
 
     beforeEach(() => {
       mockPrisma = createMockPrismaService();
@@ -116,20 +125,28 @@ describe('Test Helpers', () => {
     it('should configure create mock to reject with unique constraint error', () => {
       setupMockPrismaErrors(mockPrisma);
 
-      expect(mockPrisma.item.create.mockRejectedValue).toBeDefined();
+      expect(
+        jest.mocked(mockPrisma.item.create).mockRejectedValue,
+      ).toBeDefined();
     });
 
     it('should configure find methods to return null', () => {
       setupMockPrismaErrors(mockPrisma);
 
-      expect(mockPrisma.item.findFirst.mockResolvedValue).toBeDefined();
-      expect(mockPrisma.item.findUnique.mockResolvedValue).toBeDefined();
+      expect(
+        jest.mocked(mockPrisma.item.findFirst).mockResolvedValue,
+      ).toBeDefined();
+      expect(
+        jest.mocked(mockPrisma.item.findUnique).mockResolvedValue,
+      ).toBeDefined();
     });
 
     it('should configure update mock to reject with record not found error', () => {
       setupMockPrismaErrors(mockPrisma);
 
-      expect(mockPrisma.item.update.mockRejectedValue).toBeDefined();
+      expect(
+        jest.mocked(mockPrisma.item.update).mockRejectedValue,
+      ).toBeDefined();
     });
   });
 

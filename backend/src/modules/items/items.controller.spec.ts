@@ -51,7 +51,9 @@ describe('ItemsController', () => {
       const result = await controller.create(createDto);
 
       // Assert
-      expect(mockItemsService.create).toHaveBeenCalledWith(createDto);
+      expect(jest.mocked(mockItemsService).create).toHaveBeenCalledWith(
+        createDto,
+      );
       expectItemStructure(result);
       expect(result.id).toBe(1);
       expect(result.code).toBe(createDto.code);
@@ -71,7 +73,9 @@ describe('ItemsController', () => {
       await expect(controller.create(createDto)).rejects.toThrow(
         ConflictException,
       );
-      expect(mockItemsService.create).toHaveBeenCalledWith(createDto);
+      expect(jest.mocked(mockItemsService).create).toHaveBeenCalledWith(
+        createDto,
+      );
     });
   });
 
@@ -96,7 +100,7 @@ describe('ItemsController', () => {
       const result = await controller.findAll({});
 
       // Assert
-      expect(mockItemsService.findAll).toHaveBeenCalledWith({});
+      expect(jest.mocked(mockItemsService).findAll).toHaveBeenCalledWith({});
       expectPaginationStructure(result);
       expect(result.data).toHaveLength(3);
     });
@@ -128,7 +132,9 @@ describe('ItemsController', () => {
       await controller.findAll(queryDto);
 
       // Assert
-      expect(mockItemsService.findAll).toHaveBeenCalledWith(queryDto);
+      expect(jest.mocked(mockItemsService).findAll).toHaveBeenCalledWith(
+        queryDto,
+      );
     });
   });
 
@@ -141,10 +147,9 @@ describe('ItemsController', () => {
       const result = await controller.checkCode('EXISTING');
 
       // Assert
-      expect(mockItemsService.checkCodeExists).toHaveBeenCalledWith(
-        'EXISTING',
-        undefined,
-      );
+      expect(
+        jest.mocked(mockItemsService.checkCodeExists),
+      ).toHaveBeenCalledWith('EXISTING', undefined);
       expect(result).toEqual({
         exists: true,
         message: 'Le code "EXISTING" est déjà utilisé',
@@ -159,10 +164,9 @@ describe('ItemsController', () => {
       const result = await controller.checkCode('NEW_CODE');
 
       // Assert
-      expect(mockItemsService.checkCodeExists).toHaveBeenCalledWith(
-        'NEW_CODE',
-        undefined,
-      );
+      expect(
+        jest.mocked(mockItemsService.checkCodeExists),
+      ).toHaveBeenCalledWith('NEW_CODE', undefined);
       expect(result).toEqual({
         exists: false,
         message: 'Le code "NEW_CODE" est disponible',
@@ -177,10 +181,9 @@ describe('ItemsController', () => {
       await controller.checkCode('EXISTING', '5');
 
       // Assert
-      expect(mockItemsService.checkCodeExists).toHaveBeenCalledWith(
-        'EXISTING',
-        5,
-      );
+      expect(
+        jest.mocked(mockItemsService.checkCodeExists),
+      ).toHaveBeenCalledWith('EXISTING', 5);
     });
 
     it('should handle invalid excludeId parameter', async () => {
@@ -191,10 +194,9 @@ describe('ItemsController', () => {
       await controller.checkCode('EXISTING', 'invalid');
 
       // Assert
-      expect(mockItemsService.checkCodeExists).toHaveBeenCalledWith(
-        'EXISTING',
-        NaN,
-      );
+      expect(
+        jest.mocked(mockItemsService.checkCodeExists),
+      ).toHaveBeenCalledWith('EXISTING', NaN);
     });
   });
 
@@ -208,7 +210,7 @@ describe('ItemsController', () => {
       const result = await controller.findOne(1);
 
       // Assert
-      expect(mockItemsService.findOne).toHaveBeenCalledWith(1);
+      expect(jest.mocked(mockItemsService).findOne).toHaveBeenCalledWith(1);
       expectItemStructure(result);
       expect(result.id).toBe(1);
     });
@@ -221,7 +223,7 @@ describe('ItemsController', () => {
 
       // Act & Assert
       await expect(controller.findOne(999)).rejects.toThrow(NotFoundException);
-      expect(mockItemsService.findOne).toHaveBeenCalledWith(999);
+      expect(jest.mocked(mockItemsService).findOne).toHaveBeenCalledWith(999);
     });
   });
 
@@ -236,7 +238,10 @@ describe('ItemsController', () => {
       const result = await controller.update(1, updateDto);
 
       // Assert
-      expect(mockItemsService.update).toHaveBeenCalledWith(1, updateDto);
+      expect(jest.mocked(mockItemsService).update).toHaveBeenCalledWith(
+        1,
+        updateDto,
+      );
       expectItemStructure(result);
       expect(result.name).toBe('Updated Name');
     });
@@ -252,7 +257,10 @@ describe('ItemsController', () => {
       await expect(controller.update(999, updateDto)).rejects.toThrow(
         NotFoundException,
       );
-      expect(mockItemsService.update).toHaveBeenCalledWith(999, updateDto);
+      expect(jest.mocked(mockItemsService).update).toHaveBeenCalledWith(
+        999,
+        updateDto,
+      );
     });
 
     it('should handle ConflictException from service', async () => {
@@ -285,7 +293,10 @@ describe('ItemsController', () => {
       const result = await controller.partialUpdate(1, partialUpdateDto);
 
       // Assert
-      expect(mockItemsService.update).toHaveBeenCalledWith(1, partialUpdateDto);
+      expect(jest.mocked(mockItemsService).update).toHaveBeenCalledWith(
+        1,
+        partialUpdateDto,
+      );
       expectItemStructure(result);
       expect(result.name).toBe('Partially Updated Name');
     });
@@ -300,7 +311,10 @@ describe('ItemsController', () => {
       const result = await controller.partialUpdate(1, emptyUpdateDto);
 
       // Assert
-      expect(mockItemsService.update).toHaveBeenCalledWith(1, emptyUpdateDto);
+      expect(jest.mocked(mockItemsService).update).toHaveBeenCalledWith(
+        1,
+        emptyUpdateDto,
+      );
       expectItemStructure(result);
     });
   });
@@ -319,7 +333,7 @@ describe('ItemsController', () => {
       const result = await controller.remove(1);
 
       // Assert
-      expect(mockItemsService.remove).toHaveBeenCalledWith(1);
+      expect(jest.mocked(mockItemsService).remove).toHaveBeenCalledWith(1);
       expect(result).toBeUndefined(); // Controller returns void for DELETE with 204
     });
 
@@ -331,7 +345,7 @@ describe('ItemsController', () => {
 
       // Act & Assert
       await expect(controller.remove(999)).rejects.toThrow(NotFoundException);
-      expect(mockItemsService.remove).toHaveBeenCalledWith(999);
+      expect(jest.mocked(mockItemsService).remove).toHaveBeenCalledWith(999);
     });
   });
 
@@ -349,7 +363,7 @@ describe('ItemsController', () => {
       const result = await controller.restore(1);
 
       // Assert
-      expect(mockItemsService.restore).toHaveBeenCalledWith(1);
+      expect(jest.mocked(mockItemsService).restore).toHaveBeenCalledWith(1);
       expectItemStructure(result);
       expect(result.active).toBe(true);
       expect(result.deletedAt).toBeNull();
@@ -363,7 +377,7 @@ describe('ItemsController', () => {
 
       // Act & Assert
       await expect(controller.restore(999)).rejects.toThrow(NotFoundException);
-      expect(mockItemsService.restore).toHaveBeenCalledWith(999);
+      expect(jest.mocked(mockItemsService).restore).toHaveBeenCalledWith(999);
     });
 
     it('should handle ConflictException from service', async () => {
@@ -374,7 +388,7 @@ describe('ItemsController', () => {
 
       // Act & Assert
       await expect(controller.restore(1)).rejects.toThrow(ConflictException);
-      expect(mockItemsService.restore).toHaveBeenCalledWith(1);
+      expect(jest.mocked(mockItemsService).restore).toHaveBeenCalledWith(1);
     });
   });
 
@@ -388,7 +402,7 @@ describe('ItemsController', () => {
       const result = await controller.findOne(42);
 
       // Assert
-      expect(mockItemsService.findOne).toHaveBeenCalledWith(42);
+      expect(jest.mocked(mockItemsService).findOne).toHaveBeenCalledWith(42);
       expect(result.id).toBe(42);
     });
 
@@ -403,7 +417,7 @@ describe('ItemsController', () => {
       const result = await controller.findOne(123); // Number, not string
 
       // Assert
-      expect(mockItemsService.findOne).toHaveBeenCalledWith(123);
+      expect(jest.mocked(mockItemsService).findOne).toHaveBeenCalledWith(123);
       expect(result.id).toBe(123);
     });
   });

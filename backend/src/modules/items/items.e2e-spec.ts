@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Server } from 'http';
 import request, { Response } from 'supertest';
 import { AppModule } from '../../app.module';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -41,6 +42,13 @@ interface ErrorResponse {
 interface CodeExistsResponse {
   exists: boolean;
 }
+
+/**
+ * Helper function to get properly typed HTTP server for supertest
+ */
+const getHttpServer = (app: INestApplication): Server => {
+  return app.getHttpServer() as Server;
+};
 
 describe('Items E2E', () => {
   let app: INestApplication;
@@ -90,7 +98,7 @@ describe('Items E2E', () => {
       });
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -118,7 +126,7 @@ describe('Items E2E', () => {
       };
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(minimalDto)
         .expect(201);
@@ -139,13 +147,13 @@ describe('Items E2E', () => {
     it('should fail with duplicate code', async () => {
       // Arrange
       const itemDto = ItemFactory.createDto({ code: 'DUPLICATE' });
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(itemDto)
         .expect(201);
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(itemDto)
         .expect(409);
@@ -164,7 +172,7 @@ describe('Items E2E', () => {
       };
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(invalidDto)
         .expect(400);
@@ -180,7 +188,7 @@ describe('Items E2E', () => {
     it('should get item by id successfully', async () => {
       // Arrange
       const createDto = ItemFactory.createDto();
-      const createResponse: Response = await request(app.getHttpServer())
+      const createResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -188,7 +196,7 @@ describe('Items E2E', () => {
       const createdItem = createResponse.body as ItemResponse;
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get(`/api/v1/items/${createdItem.id}`)
         .expect(200);
 
@@ -201,7 +209,7 @@ describe('Items E2E', () => {
 
     it('should return 404 for non-existent id', async () => {
       // Act
-      await request(app.getHttpServer()).get('/api/v1/items/99999').expect(404);
+      await request(getHttpServer(app)).get('/api/v1/items/99999').expect(404);
     });
   });
 
@@ -214,14 +222,14 @@ describe('Items E2E', () => {
       ];
 
       for (const item of items) {
-        await request(app.getHttpServer())
+        await request(getHttpServer(app))
           .post('/api/v1/items')
           .send(item)
           .expect(201);
       }
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get('/api/v1/items')
         .expect(200);
 
@@ -239,18 +247,18 @@ describe('Items E2E', () => {
 
     it('should filter items by search', async () => {
       // Arrange
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'USB001', name: 'USB Drive' }))
         .expect(201);
 
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'HD001', name: 'Hard Drive' }))
         .expect(201);
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get('/api/v1/items?search=USB')
         .expect(200);
 
@@ -264,20 +272,20 @@ describe('Items E2E', () => {
 
     it('should filter items by category', async () => {
       // Arrange
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(
           ItemFactory.createDto({ code: 'PC001', category: 'Informatique' }),
         )
         .expect(201);
 
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'CH001', category: 'Mobilier' }))
         .expect(201);
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get('/api/v1/items?category=Informatique')
         .expect(200);
 
@@ -289,18 +297,18 @@ describe('Items E2E', () => {
 
     it('should filter items by active status', async () => {
       // Arrange
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'ACT001', active: true }))
         .expect(201);
 
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'INACT001', active: false }))
         .expect(201);
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get('/api/v1/items?active=false')
         .expect(200);
 
@@ -315,7 +323,7 @@ describe('Items E2E', () => {
     it('should update item successfully', async () => {
       // Arrange
       const createDto = ItemFactory.createDto();
-      const createResponse: Response = await request(app.getHttpServer())
+      const createResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -324,7 +332,7 @@ describe('Items E2E', () => {
       const updateDto = { name: 'Updated Name', stockMin: 20 };
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .put(`/api/v1/items/${createdItem.id}`)
         .send(updateDto)
         .expect(200);
@@ -340,7 +348,7 @@ describe('Items E2E', () => {
 
     it('should return 404 for non-existent item', async () => {
       // Act
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .put('/api/v1/items/99999')
         .send({ name: 'Test' })
         .expect(404);
@@ -348,12 +356,12 @@ describe('Items E2E', () => {
 
     it('should fail with duplicate code on update', async () => {
       // Arrange
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'FIRST' }))
         .expect(201);
 
-      const secondResponse: Response = await request(app.getHttpServer())
+      const secondResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(ItemFactory.createDto({ code: 'SECOND' }))
         .expect(201);
@@ -361,7 +369,7 @@ describe('Items E2E', () => {
       const secondItem = secondResponse.body as ItemResponse;
 
       // Act
-      const updateResponse: Response = await request(app.getHttpServer())
+      const updateResponse: Response = await request(getHttpServer(app))
         .put(`/api/v1/items/${secondItem.id}`)
         .send({ code: 'FIRST' })
         .expect(409);
@@ -377,7 +385,7 @@ describe('Items E2E', () => {
     it('should soft delete item successfully', async () => {
       // Arrange
       const createDto = ItemFactory.createDto();
-      const createResponse: Response = await request(app.getHttpServer())
+      const createResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -385,7 +393,7 @@ describe('Items E2E', () => {
       const createdItem = createResponse.body as ItemResponse;
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .delete(`/api/v1/items/${createdItem.id}`)
         .expect(200);
 
@@ -395,14 +403,14 @@ describe('Items E2E', () => {
       expect(deletedItem.active).toBe(false);
 
       // Verify item is not returned in regular list
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .get(`/api/v1/items/${createdItem.id}`)
         .expect(404);
     });
 
     it('should return 404 for non-existent item', async () => {
       // Act
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .delete('/api/v1/items/99999')
         .expect(404);
     });
@@ -412,7 +420,7 @@ describe('Items E2E', () => {
     it('should restore deleted item successfully', async () => {
       // Arrange
       const createDto = ItemFactory.createDto();
-      const createResponse: Response = await request(app.getHttpServer())
+      const createResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -420,12 +428,12 @@ describe('Items E2E', () => {
       const createdItem = createResponse.body as ItemResponse;
 
       // Delete first
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .delete(`/api/v1/items/${createdItem.id}`)
         .expect(200);
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .post(`/api/v1/items/${createdItem.id}/restore`)
         .expect(200);
 
@@ -435,14 +443,14 @@ describe('Items E2E', () => {
       expect(restoredItem.active).toBe(true);
 
       // Verify item is accessible again
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .get(`/api/v1/items/${createdItem.id}`)
         .expect(200);
     });
 
     it('should return 404 for non-existent item', async () => {
       // Act
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items/99999/restore')
         .expect(404);
     });
@@ -450,7 +458,7 @@ describe('Items E2E', () => {
     it('should return 409 for non-deleted item', async () => {
       // Arrange
       const createDto = ItemFactory.createDto();
-      const createResponse: Response = await request(app.getHttpServer())
+      const createResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -458,7 +466,7 @@ describe('Items E2E', () => {
       const createdItem = createResponse.body as ItemResponse;
 
       // Act
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post(`/api/v1/items/${createdItem.id}/restore`)
         .expect(409);
     });
@@ -468,13 +476,13 @@ describe('Items E2E', () => {
     it('should return true for existing code', async () => {
       // Arrange
       const createDto = ItemFactory.createDto({ code: 'EXISTS001' });
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
 
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get('/api/v1/items/check-code/EXISTS001')
         .expect(200);
 
@@ -485,7 +493,7 @@ describe('Items E2E', () => {
 
     it('should return false for non-existing code', async () => {
       // Act
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get('/api/v1/items/check-code/NONEXISTENT')
         .expect(200);
 
@@ -497,7 +505,7 @@ describe('Items E2E', () => {
     it('should exclude item by id when provided', async () => {
       // Arrange
       const createDto = ItemFactory.createDto({ code: 'TEST001' });
-      const createResponse: Response = await request(app.getHttpServer())
+      const createResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(createDto)
         .expect(201);
@@ -505,7 +513,7 @@ describe('Items E2E', () => {
       const createdItem = createResponse.body as ItemResponse;
 
       // Act - Check same code excluding the item itself
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get(`/api/v1/items/check-code/TEST001?excludeId=${createdItem.id}`)
         .expect(200);
 
@@ -517,13 +525,13 @@ describe('Items E2E', () => {
     it('should return true when checking existing code with different excludeId', async () => {
       // Arrange
       const firstDto = ItemFactory.createDto({ code: 'FIRST001' });
-      await request(app.getHttpServer())
+      await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(firstDto)
         .expect(201);
 
       const secondDto = ItemFactory.createDto({ code: 'SECOND001' });
-      const secondResponse: Response = await request(app.getHttpServer())
+      const secondResponse: Response = await request(getHttpServer(app))
         .post('/api/v1/items')
         .send(secondDto)
         .expect(201);
@@ -531,7 +539,7 @@ describe('Items E2E', () => {
       const secondItem = secondResponse.body as ItemResponse;
 
       // Act - Check first code excluding second item (should still exist)
-      const response: Response = await request(app.getHttpServer())
+      const response: Response = await request(getHttpServer(app))
         .get(`/api/v1/items/check-code/FIRST001?excludeId=${secondItem.id}`)
         .expect(200);
 

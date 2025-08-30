@@ -8,12 +8,13 @@ import {
   createMockPrismaService,
   expectItemStructure,
   expectPaginationStructure,
+  MockPrismaService,
 } from './test/test-helpers';
 import { UpdateItemDto } from './dto/update-item.dto';
 
 describe('ItemsService', () => {
   let service: ItemsService;
-  let mockPrisma: any;
+  let mockPrisma: MockPrismaService;
 
   beforeEach(async () => {
     mockPrisma = createMockPrismaService();
@@ -81,7 +82,7 @@ describe('ItemsService', () => {
           unit: 'unité',
           stockMin: 0,
           active: true,
-        }),
+        }) as Prisma.ItemCreateArgs['data'],
       });
     });
 
@@ -417,7 +418,7 @@ describe('ItemsService', () => {
       expect(mockPrisma.item.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: {
-          deletedAt: expect.any(Date),
+          deletedAt: expect.any(Date) as Date,
           active: false,
         },
       });

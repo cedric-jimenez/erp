@@ -2,6 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaModule } from './prisma.module';
 import { PrismaService } from './prisma.service';
 
+/**
+ * Interface for test service that wraps PrismaService
+ */
+interface TestService {
+  prisma: PrismaService;
+}
+
 describe('PrismaModule', () => {
   let module: TestingModule;
 
@@ -57,7 +64,7 @@ describe('PrismaModule', () => {
       })
       .compile();
 
-    const testService = testModule.get('TEST_SERVICE');
+    const testService = testModule.get<TestService>('TEST_SERVICE');
     expect(testService).toBeDefined();
     expect(testService.prisma).toBeDefined();
 
