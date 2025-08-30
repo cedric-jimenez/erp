@@ -35,7 +35,7 @@ erp/
 └── README.md
 ```
 
-**Note**: Backend is implemented with basic NestJS setup and Swagger documentation. Frontend is not yet implemented.
+**Note**: Backend is implemented with NestJS setup, Swagger documentation, health checks, and testing infrastructure. Frontend is not yet implemented. PostgreSQL database and pgAdmin are configured via Docker Compose.
 
 ## Development Commands
 
@@ -130,32 +130,40 @@ make urls  # Affiche toutes les URLs
 ## Current State
 
 ### Implemented
-- ✅ **Backend**: NestJS setup with TypeScript, Docker, Swagger documentation
-- ✅ **Documentation**: Comprehensive docs in `doc/` directory
-- ✅ **Infrastructure**: Docker Compose, Makefile commands
+- ✅ **Backend**: NestJS setup with TypeScript, Swagger documentation, health check endpoint
+- ✅ **Documentation**: Comprehensive docs in `doc/` directory with detailed epics and user stories
+- ✅ **Infrastructure**: Docker Compose with PostgreSQL, pgAdmin, backend services
 - ✅ **API Documentation**: Swagger UI accessible at `/api`
+- ✅ **Testing**: Jest setup with unit tests, E2E tests, and coverage reporting
+- ✅ **Code Quality**: ESLint, Prettier configuration with TypeScript support
 
 ### In Progress / Planned
-- ⏳ **Database**: Prisma ORM setup with PostgreSQL
+- ⏳ **Database**: Prisma ORM setup with PostgreSQL (infrastructure ready)
 - ⏳ **Authentication**: JWT + RBAC implementation
 - ⏳ **Core Modules**: Items, Stock, Vouchers management
 - ⏳ **Frontend**: Next.js implementation
-- ⏳ **Testing**: Unit and E2E tests
+- 📋 **Backlog**: Detailed user stories available in `doc/tickets/`
 
 ### Available Commands
 ```bash
 # Backend development
 cd backend && yarn start:dev
+cd backend && yarn test        # Run unit tests
+cd backend && yarn test:cov    # Run tests with coverage
+cd backend && yarn lint        # Run ESLint
+cd backend && yarn typecheck   # Check TypeScript types
 
 # Docker management
-make up     # Start all services
+make up     # Start all services (PostgreSQL, pgAdmin, Backend)
 make down   # Stop all services  
 make urls   # Show all project URLs
 
 # Access points
 # - Backend API: http://localhost:3001
 # - Swagger docs: http://localhost:3001/api
-# - pgAdmin: http://localhost:5050 (when configured)
+# - Health check: http://localhost:3001/health
+# - pgAdmin: http://localhost:5050 (admin@example.com / admin123)
+# - PostgreSQL: localhost:5432 (erp_user / erp_password / erp_db)
 ```
 
 When implementing new features, refer to the detailed guidelines in `doc/guidelines.md` for UX/UI patterns, API design, and security considerations.
