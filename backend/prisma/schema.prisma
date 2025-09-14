@@ -22,23 +22,82 @@ model HealthCheck {
   @@map("health_check")
 }
 
+// Enum pour les statuts des devis
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
 // Modèle Item pour la gestion des articles
 model Item {
-  id          Int       @id @default(autoincrement())
-  code        String    @unique @db.VarChar(50)
-  name        String    @db.VarChar(200)
-  description String?   @db.Text
-  unit        String    @default("unité") @db.VarChar(20)
-  category    String?   @db.VarChar(100)
-  stockMin    Int       @default(0) @map("stock_min")
-  active      Boolean   @default(true)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id          Int         @id @default(autoincrement())
+  code        String      @unique @db.VarChar(50)
+  name        String      @db.VarChar(200)
+  description String?     @db.Text
+  unit        String      @default("unité") @db.VarChar(20)
+  category    String?     @db.VarChar(100)
+  stockMin    Int         @default(0) @map("stock_min")
+  active      Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  deletedAt   DateTime?   @map("deleted_at")
+
+  // Relations
+  quoteLines  QuoteLine[]
 
   @@index([code])
   @@index([category])
   @@index([active])
   @@index([deletedAt])
   @@map("items")
+}
+
+// Modèle Quote pour la gestion des devis
+model Quote {
+  id            Int          @id @default(autoincrement())
+  number        String       @unique @db.VarChar(50)
+  customerId    Int?         @map("customer_id")
+  customerName  String       @map("customer_name") @db.VarChar(200)
+  customerEmail String?      @map("customer_email") @db.VarChar(200)
+  status        QuoteStatus  @default(DRAFT)
+  totalAmount   Decimal      @default(0) @map("total_amount") @db.Decimal(10, 2)
+  taxAmount     Decimal      @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  totalWithTax  Decimal      @default(0) @map("total_with_tax") @db.Decimal(10, 2)
+  validUntil    DateTime     @map("valid_until")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  deletedAt     DateTime?    @map("deleted_at")
+
+  // Relations
+  lines         QuoteLine[]
+
+  @@index([number])
+  @@index([status])
+  @@index([customerId])
+  @@index([deletedAt])
+  @@index([validUntil])
+  @@map("quotes")
+}
+
+// Modèle QuoteLine pour les lignes de devis
+model QuoteLine {
+  id        Int     @id @default(autoincrement())
+  quoteId   Int     @map("quote_id")
+  itemId    Int     @map("item_id")
+  itemCode  String  @map("item_code") @db.VarChar(50)
+  itemName  String  @map("item_name") @db.VarChar(200)
+  quantity  Decimal @db.Decimal(10, 3)
+  unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
+  lineTotal Decimal @map("line_total") @db.Decimal(10, 2)
+
+  // Relations
+  quote     Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  item      Item    @relation(fields: [itemId], references: [id], onDelete: Restrict)
+
+  @@index([quoteId])
+  @@index([itemId])
+  @@map("quote_lines")
 }

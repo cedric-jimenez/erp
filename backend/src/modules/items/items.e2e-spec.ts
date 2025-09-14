@@ -1,54 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Server } from 'http';
 import request, { Response } from 'supertest';
 import { AppModule } from '../../app.module';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ItemFactory } from './test/item.factory';
-
-// Types pour les réponses API
-interface ItemResponse {
-  id: number;
-  code: string;
-  name: string;
-  description: string | null;
-  unit: string;
-  category: string | null;
-  stockMin: number;
-  active: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-}
-
-interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrevious: boolean;
-  };
-}
-
-interface ErrorResponse {
-  message: string | string[];
-  error?: string;
-  statusCode: number;
-}
-
-interface CodeExistsResponse {
-  exists: boolean;
-}
-
-/**
- * Helper function to get properly typed HTTP server for supertest
- */
-const getHttpServer = (app: INestApplication): Server => {
-  return app.getHttpServer() as Server;
-};
+import {
+  getHttpServer,
+  cleanupDatabase,
+} from '../../../test/helpers/e2e-helpers';
+import {
+  ItemResponse,
+  PaginatedResponse,
+  ErrorResponse,
+  CodeExistsResponse,
+} from '../../../test/types/api-responses';
 
 describe('Items E2E', () => {
   let app: INestApplication;
@@ -76,12 +41,11 @@ describe('Items E2E', () => {
   });
 
   beforeEach(async () => {
-    // Clean up database before each test
-    await prisma.item.deleteMany({});
+    await cleanupDatabase(prisma);
   });
 
   afterAll(async () => {
-    await prisma.item.deleteMany({});
+    await cleanupDatabase(prisma);
     await prisma.$disconnect();
     await app.close();
   });
@@ -393,14 +357,16 @@ describe('Items E2E', () => {
       const createdItem = createResponse.body as ItemResponse;
 
       // Act
-      const response: Response = await request(getHttpServer(app))
+      await request(getHttpServer(app))
         .delete(`/api/v1/items/${createdItem.id}`)
-        .expect(200);
+        .expect(204);
 
-      // Assert
-      const deletedItem = response.body as ItemResponse;
-      expect(deletedItem.deletedAt).not.toBeNull();
-      expect(deletedItem.active).toBe(false);
+      // Assert - Check database for soft deletion
+      const deletedItem = await prisma.item.findUnique({
+        where: { id: createdItem.id },
+      });
+      expect(deletedItem?.deletedAt).not.toBeNull();
+      expect(deletedItem?.active).toBe(false);
 
       // Verify item is not returned in regular list
       await request(getHttpServer(app))
@@ -430,12 +396,12 @@ describe('Items E2E', () => {
       // Delete first
       await request(getHttpServer(app))
         .delete(`/api/v1/items/${createdItem.id}`)
-        .expect(200);
+        .expect(204);
 
       // Act
       const response: Response = await request(getHttpServer(app))
         .post(`/api/v1/items/${createdItem.id}/restore`)
-        .expect(200);
+        .expect(201);
 
       // Assert
       const restoredItem = response.body as ItemResponse;
@@ -483,7 +449,7 @@ describe('Items E2E', () => {
 
       // Act
       const response: Response = await request(getHttpServer(app))
-        .get('/api/v1/items/check-code/EXISTS001')
+        .get('/api/v1/items/check-code?code=EXISTS001')
         .expect(200);
 
       // Assert
@@ -494,7 +460,7 @@ describe('Items E2E', () => {
     it('should return false for non-existing code', async () => {
       // Act
       const response: Response = await request(getHttpServer(app))
-        .get('/api/v1/items/check-code/NONEXISTENT')
+        .get('/api/v1/items/check-code?code=NONEXISTENT')
         .expect(200);
 
       // Assert
@@ -514,7 +480,9 @@ describe('Items E2E', () => {
 
       // Act - Check same code excluding the item itself
       const response: Response = await request(getHttpServer(app))
-        .get(`/api/v1/items/check-code/TEST001?excludeId=${createdItem.id}`)
+        .get(
+          `/api/v1/items/check-code?code=TEST001&excludeId=${createdItem.id}`,
+        )
         .expect(200);
 
       // Assert
@@ -540,7 +508,9 @@ describe('Items E2E', () => {
 
       // Act - Check first code excluding second item (should still exist)
       const response: Response = await request(getHttpServer(app))
-        .get(`/api/v1/items/check-code/FIRST001?excludeId=${secondItem.id}`)
+        .get(
+          `/api/v1/items/check-code?code=FIRST001&excludeId=${secondItem.id}`,
+        )
         .expect(200);
 
       // Assert
